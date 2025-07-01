@@ -1,0 +1,28 @@
+# Папка с билдом Maven
+/target/
+
+# Файлы VS Code
+.vscode/
+
+# ОС-файлы
+.DS_Store
+Thumbs.db
+
+# Логи
+*.log
+
+# Классы и артефакты
+*.class
+*.jar
+*.war
+*.ear
+
+# Временные файлы
+*.tmp
+*.bak
+
+# Дополнительные настройки (если используешь Eclipse)
+/.settings/
+.project
+.classpath
+.caches/
