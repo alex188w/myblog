@@ -12,8 +12,8 @@
     <name>MyBlog</name>
 
     <properties>
-        <maven.compiler.source>24</maven.compiler.source>
-        <maven.compiler.target>24</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
@@ -34,18 +34,37 @@
             <version>6.1.4</version>
         </dependency>
 
-        <!-- Thymeleaf -->
+       <!-- Spring JDBC -->
         <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring6</artifactId>
-            <version>3.1.2.RELEASE</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>6.1.4</version>
         </dependency>
 
-        <!-- PostgreSQL Driver -->
+        <!-- PostgreSQL driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.7.3</version>
+        </dependency>
+
+        <!-- HikariCP (пул соединений, опционально) -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.1.0</version>
+        </dependency>
+
+        <!-- Thymeleaf -->
+        <dependency>
+        <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>3.1.2.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring6</artifactId>
+            <version>3.1.2.RELEASE</version>
         </dependency>
 
         <!-- JPA / Hibernate -->
@@ -79,29 +98,44 @@
 
     </dependencies>
 
-    <build>
-        <finalName>myblog</finalName>
-        <plugins>
+<build>
+    <finalName>myblog</finalName>
+    <plugins>
 
-            <!-- Compiler plugin for Java 24 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <source>24</source>
-                    <target>24</target>
-                </configuration>
-            </plugin>
+        <!-- Compiler plugin for Java 24 -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.11.0</version>
+            <configuration>
+                <source>21</source>
+                <target>21</target>
+            </configuration>
+        </plugin>
 
-            <!-- WAR packaging plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.4.0</version>
-            </plugin>
+        <!-- WAR packaging plugin -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.4.0</version>
+        </plugin>
 
-        </plugins>
-    </build>
+        <!-- Tomcat plugin for running the app -->
+        <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>11.0.20</version>
+            <configuration>
+                <webApp>
+                    <contextPath>/myblog</contextPath>
+                </webApp>
+                <httpConnector>
+                    <port>9090</port>
+                </httpConnector>
+            </configuration>
+        </plugin>
+
+    </plugins>
+</build>
 
 </project>

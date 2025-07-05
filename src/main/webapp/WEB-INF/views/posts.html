@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Блог — Посты</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .post {
+            border-bottom: 1px solid #ccc;
+            padding: 20px 0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .tags span {
+            background-color: #f2f2f2;
+            padding: 4px 8px;
+            margin-right: 5px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Список постов</h1>
+    <form method="GET" th:action="@{/posts/add}">
+        <button type="submit">Добавить пост</button>
+    </form>
+</header>
+
+<section>
+    <form method="GET" th:action="@{/posts}">
+        <p>
+            <label for="search">Найти по тегу:</label>
+            <input type="text" id="search" name="search" th:value="${search}">
+            <button type="submit">&#128269;</button>
+        </p>
+        <p>
+            <label for="pageSize">Число постов:</label>
+            <select id="pageSize" name="pageSize" onchange="this.form.submit()">
+                <option th:each="size : ${new int[]{5,10,20,50,100}}"
+                        th:value="${size}"
+                        th:text="${size}"
+                        th:selected="${paging.pageSize == size}">
+                </option>
+            </select>
+        </p>
+        <p>
+            <button th:if="${paging.hasPrevious()}" name="pageNumber" th:value="${paging.pageNumber() - 1}">&lt;</button>
+            <span th:text="'Страница: ' + ${paging.pageNumber()}"></span>
+            <button th:if="${paging.hasNext()}" name="pageNumber" th:value="${paging.pageNumber() + 1}">&gt;</button>
+        </p>
+    </form>
+</section>
+
+<section th:each="post : ${posts}" class="post">
+    <h2 th:text="${post.title}">Заголовок</h2>
+    <a th:href="@{/posts/{id}(id=${post.id})}">
+        <img th:src="@{http://localhost:8080/images/{id}(id=${post.id})}" alt="Обложка поста">
+    </a>
+    <!-- <p th:text="${post.textPreview}">Краткое описание</p> -->
+    <!-- <p>
+        👍 <span th:text="${post.likesCount}">0</span>
+        ✉ <span th:text="${post.comments.size()}">0</span>
+    </p> -->
+    <div class="tags">
+        <span th:each="tag : ${post.tags}" th:text="'#' + ${tag}"></span>
+    </div>
+</section>
+
+</body>
+</html>
