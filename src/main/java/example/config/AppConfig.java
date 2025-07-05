@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 import com.zaxxer.hikari.HikariDataSource;
@@ -18,6 +19,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "example")
+@EnableJpaRepositories(basePackages = "example.repository")
 @PropertySource("classpath:application.properties")
 public class AppConfig implements WebMvcConfigurer {
 
@@ -51,27 +53,27 @@ public class AppConfig implements WebMvcConfigurer {
         return resolver;
     }
 
-    @Value("${db.url}")
-    private String jdbcUrl;
+    // @Value("${db.url}")
+    // private String jdbcUrl;
 
-    @Value("${db.username}")
-    private String username;
+    // @Value("${db.username}")
+    // private String username;
 
-    @Value("${db.password}")
-    private String password;
+    // @Value("${db.password}")
+    // private String password;
 
-    @Bean
-    public DataSource dataSource() {
-        var ds = new HikariDataSource();
-        ds.setJdbcUrl(jdbcUrl);
-        ds.setUsername(username);
-        ds.setPassword(password);
-        ds.setDriverClassName("org.postgresql.Driver");
-        return ds;
-    }
+    // @Bean
+    // public DataSource dataSource() {
+    //     var ds = new HikariDataSource();
+    //     ds.setJdbcUrl(jdbcUrl);
+    //     ds.setUsername(username);
+    //     ds.setPassword(password);
+    //     ds.setDriverClassName("org.postgresql.Driver");
+    //     return ds;
+    // }
 
-    @Bean
-    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-        return new JdbcTemplate(dataSource);
-    }
+    // @Bean
+    // public JdbcTemplate jdbcTemplate(DataSource dataSource) {
+    //     return new JdbcTemplate(dataSource);
+    // }
 }

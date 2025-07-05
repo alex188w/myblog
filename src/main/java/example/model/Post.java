@@ -8,17 +8,19 @@ public class Post {
     private String preview;
     private String imageUrl;
     private List<String> tags;
+    private String text;
     private int commentsCount;
     private int likes;
-
+    
     public Post() {}
 
-    public Post(Long id, String title, String preview, String imageUrl, List<String> tags, int commentsCount, int likes) {
+    public Post(Long id, String title, String preview, String imageUrl, List<String> tags, String  text, int commentsCount, int likes) {
         this.id = id;
         this.title = title;
         this.preview = preview;
         this.imageUrl = imageUrl;
         this.tags = tags;
+        this.text = text;
         this.commentsCount = commentsCount;
         this.likes = likes;
     }
@@ -38,6 +40,9 @@ public class Post {
 
     public List<String> getTags() { return tags; }
     public void setTags(List<String> tags) { this.tags = tags; }
+
+    public String getText() { return text; }
+    public void setText(String text) { this.text = text; }
 
     public int getCommentsCount() { return commentsCount; }
     public void setCommentsCount(int commentsCount) { this.commentsCount = commentsCount; }

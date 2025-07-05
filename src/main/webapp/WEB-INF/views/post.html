@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Витрина товаров</title>
+    <style>
+        .comment-textarea {
+            width: 250px;
+            height: 100px;
+        }
+
+        .comment-current {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+    </style>
+    <!-- <script>
+        function editComment(id) {
+            var comment = document.getElementById("comment" + id);
+            var newComment = document.createElement("textarea");
+            newComment.innerHTML = comment.innerHTML;
+            newComment.rows = 3;
+            newComment.name = "text";
+            newComment.style = "width:100%;";
+            comment.parentNode.replaceChild(newComment, comment);
+
+            var button = document.getElementById(id);
+            button.remove();
+
+            var newButton = document.createElement("button");
+            newButton.innerHTML = "&#10003;";
+            newButton.style = "float:right;"
+            newComment.parentNode.appendChild(newButton);
+        }
+
+        function addComment(id) {
+            var button = document.getElementById("addCommentButton");
+            button.remove();
+
+            var form = document.getElementById("addCommentForm");
+
+            var newComment = document.createElement("textarea");
+            newComment.rows = 3;
+            newComment.name = "text";
+            newComment.style = "width:100%;";
+            form.appendChild(newComment);
+
+            var newButton = document.createElement("button");
+            newButton.innerHTML = "&#10003;";
+            newButton.style = "float:right;"
+            form.appendChild(newButton);
+        }
+    </script> -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".comment-text").forEach(elem => {
+                elem.addEventListener("click", () => {
+                    const commentId = elem.dataset.id;
+                    const currentText = elem.innerText;
+                    const form = document.getElementById("form-" + commentId);
+
+                    const textarea = document.createElement("textarea");
+                    textarea.name = "text";
+                    textarea.value = currentText;
+                    textarea.rows = 3;
+                    textarea.style.width = "100%";
+
+                    textarea.addEventListener("keydown", (e) => {
+                        if (e.ctrlKey && e.key === "Enter") {
+                            form.submit();
+                        }
+                    });
+
+                    elem.replaceWith(textarea);
+                    textarea.focus();
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <a href="/posts" style="float:right;">
+        <b>НА ГЛАВНУЮ &cudarrr;</b>
+    </a>
+    <table style="width:50%;margin-left:auto;margin-right:auto;">
+        <tr>
+            <td>
+                <form method="GET" th:action="${'/posts/'+post.getId()+'/edit'}">
+                    <button style="float:right;">РЕДАКТИРОВАТЬ ПОСТ</button>
+                </form>
+            </td>
+            <td>
+                <form method="POST" th:action="${'/posts/'+post.getId()+'/delete'}">
+                    <button style="float:right;">УДАЛИТЬ ПОСТ</button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <h2 th:text="${post.getTitle()}"></h2>
+                <p style="height:300px">
+                    <img height="300" th:src="${'http://localhost:8080/images/'+post.getId()}">
+                </p>
+                <p>
+                <form th:action="@{'/posts/' + ${post.id} + '/like'}" method="post">
+                    <button name="like" value="true">&#x1F44D;</button>
+                    <span th:text="${post.getLikes()}"></span>
+                    <button name="like" value="false">&#128078;</button>
+                    <span th:text="${'комментарии '+post.getComments().size()}" style="float:right;"></span>
+                </form>
+                </p>
+                <p>
+                    <span th:each="tag : ${post.tags}" th:text="${'#' + tag + ' '}"></span>
+                </p>
+            </td>
+        </tr>
+        <tr th:each="textPart : ${post.getTextParts()}">
+            <td th:text="${textPart}"></td>
+        </tr>
+        <tr>
+            <td>
+                <hr>
+                <h2>Комментарии</h2>
+            </td>
+        </tr>
+        <tr th:each="comment : ${post.comments}">
+            <td class="comment-current" colspan="2" style="border-left: thin solid grey;">
+                <form th:id="${'form-' + comment.id}"
+                    th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id}}" method="post">
+                    <span class="comment-text" th:id="${'comment' + comment.id}" th:data-id="${comment.id}"
+                        th:text="${comment.text}"></span>
+                </form>
+                <form th:action="@{'/posts/' + ${post.id} + '/comments/' + ${comment.id} + '/delete'}" method="post"
+                    style="margin-top: 5px;">
+                    <button style="float:right;">&#10007;</button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <!-- <form id="addCommentForm" th:action="${'/posts/'+post.getId()+'/comments'}" method="post">
+                    <button id="addCommentButton" style="float:right;" onclick="addComment()">Добавить
+                        комментарий</button>
+                </form> -->
+                <form id="addCommentForm" th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post">
+                    <textarea class="comment-textarea" name="text" placeholder="Введите комментарий" required></textarea>
+                    <button type="submit" style="float:right;">Добавить комментарий</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
