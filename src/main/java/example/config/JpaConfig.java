@@ -21,36 +21,9 @@ import java.util.Properties;
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
 @EnableJpaRepositories(basePackages = "example.repository")
-@ComponentScan(basePackages = "example")
 public class JpaConfig {
 
-    // создаем и регистрируем подключение к БД. Можно так
-    // @Bean
-    // public static PropertySourcesPlaceholderConfigurer
-    // propertySourcesPlaceholderConfigurer() {
-    // return new PropertySourcesPlaceholderConfigurer();
-    // }
-
-    // @Value("${db.url}")
-    // private String jdbcUrl;
-
-    // @Value("${db.username}")
-    // private String username;
-
-    // @Value("${db.password}")
-    // private String password;
-
-    // @Bean
-    // public DataSource dataSource() {
-    // var ds = new com.zaxxer.hikari.HikariDataSource();
-    // ds.setJdbcUrl(jdbcUrl);
-    // ds.setUsername(username);
-    // ds.setPassword(password);
-    // ds.setDriverClassName("org.postgresql.Driver");
-    // return ds;
-    // }
-
-    // или так
+   
     @Autowired
     private Environment env;
 

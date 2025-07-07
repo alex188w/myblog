@@ -28,3 +28,5 @@ Thumbs.db
 .caches/
 
 application.properties
+
+app.properties

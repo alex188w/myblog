@@ -44,9 +44,9 @@
 
 Приложение использует БД PostgreSQL.
 
-Для работы необходимо создать файл с настройками по адоесу: src/main/resources/application.properties:
+Для работы необходимо создать БД (напр. myblog) и файл с настройками по адоесу: src/main/resources/application.properties:
 
-    db.url=jdbc:postgresql://localhost:5432
+    db.url=jdbc:postgresql://localhost:5432/myblog
     db.username=your_username
     db.password=your_password
 
@@ -108,3 +108,55 @@
 •	Настройка на запуск в Jetty (можно через mvn package → .war файл)
 
 •	PostgreSQL: настройка и подключение к БД
+
+## Тестирование
+
+Интеграционные тесты проводятся в условиях, максимально приближенных к реальной среде выполнения приложения.
+
+* используется реальная СУБД PostgreSQL
+
+* задействована настоящая JPA-конфигурация (AppConfig, JpaConfig)
+
+* выполняется чтение/запись в тестовую базу данных, а не в память
+
+* контроллеры и сервисы подключаются к реальному слою данных через полноценный Spring-контекст.
+
+Для работы тестов необходимо создать БД (напр. test) и файл с настройками по адоесу: src/test/resources/app.properties:
+
+    db.url=jdbc:postgresql://localhost:5432/test
+    db.username=your_username
+    db.password=your_password
+
+    spring.jpa.hibernate.ddl-auto=update
+    spring.jpa.show-sql=true
+    spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+Всего создано 17 тестов, протестированы следующие package:
+
+* PostController - тип теста: Мок-тест контроллера (MockMvc + standaloneSetup). Тестируется:
+
+возврат страницы /posts, содержимого модели, правильной view через MockMvc.
+
+* PostService - тип теста: Юнит + Интеграционный. Тестируется:
+
+получение, поиск, сохранение, удаление постов, фильтрация по тегам.
+
+* CommentService -тип теста: Юнит + Интеграционный. Тестируется:
+
+Получение, сохранение, удаление, редактирование комментариев.
+
+* PostRepository - Интеграционный. Тестируется:
+
+Сохранение, поиск по ID, поиск по тегам, поиск постов с комментариями.
+
+* CommentRepository - Интеграционный. Тестируется:
+
+Поиск комментариев по ID поста через findByPostId.
+
+Запуск отдельного теста: mvn surefire:test -Dtest=PostControllerTest (на примере PostControllerTest).
+
+Запуск всех тестов: mvn test.
+
+Результат тестирования:
+
+![Тестирование](test.jpg)

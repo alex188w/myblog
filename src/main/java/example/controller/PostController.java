@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-// import org.springframework.security.web.csrf.CsrfToken;
-
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +33,7 @@ public class PostController {
     private final PostService postService;
 
     @Autowired
-    private CommentService commentService;
+    protected CommentService commentService;
 
     @Autowired
     public PostController(PostService postService) {
@@ -50,11 +47,7 @@ public class PostController {
     public String getAllPosts(Model model) {
         List<PostEntity> posts = postService.getAllPostsWithComments();
         model.addAttribute("posts", posts);
-
-        // Добавляем "заглушку" для paging
-        // Paging paging = new Paging(10, 1, false, false);
         model.addAttribute("paging");
-
         return "posts";
     }
 
@@ -81,7 +74,6 @@ public class PostController {
     @PostMapping
     public String savePost(@ModelAttribute PostEntity post,
             @RequestParam(value = "image", required = false) MultipartFile image) {
-        // Пока просто игнорируем image
         postService.save(post);
         return "redirect:/posts";
     }

@@ -124,26 +124,20 @@
             <scope>test</scope>
         </dependency>
 
-                <!-- БД для тестирования -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>2.2.224</version>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+            <version>2.2</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>6.1.6</version> <!-- укажи версию, совместимую с твоим Spring Framework -->
+            <version>6.1.6</version> 
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.1.0</version>
-        </dependency>
     </dependencies>
 
 <build>
