@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DbTestController {
     // Для тестирования подключения к БД PostgreSQL
-
     @Autowired
     private JdbcTemplate jdbcTemplate;
 

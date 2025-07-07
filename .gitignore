@@ -26,3 +26,5 @@ Thumbs.db
 .project
 .classpath
 .caches/
+
+application.properties

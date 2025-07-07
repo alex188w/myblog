@@ -5,6 +5,10 @@ import example.entity.PostEntity;
 import example.service.PostService;
 import example.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +17,17 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 // import org.springframework.security.web.csrf.CsrfToken;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/posts")
@@ -37,12 +48,12 @@ public class PostController {
 
     @GetMapping
     public String getAllPosts(Model model) {
-        List<PostEntity> posts = postService.getAllPosts();
+        List<PostEntity> posts = postService.getAllPostsWithComments();
         model.addAttribute("posts", posts);
 
         // Добавляем "заглушку" для paging
-        Paging paging = new Paging(10, 1, false, false);
-        model.addAttribute("paging", paging);
+        // Paging paging = new Paging(10, 1, false, false);
+        model.addAttribute("paging");
 
         return "posts";
     }
@@ -91,11 +102,11 @@ public class PostController {
     // обработка лайков
     @PostMapping("/{id}/like")
     public String likePost(@PathVariable Long id, @RequestParam boolean like) {
-    PostEntity post = postService.getPostById(id);
-    int current = post.getLikes();
-    post.setLikes(like ? current + 1 : Math.max(0, current - 1));
-    postService.save(post);
-    return "redirect:/posts/" + id;
+        PostEntity post = postService.getPostById(id);
+        int current = post.getLikes();
+        post.setLikes(like ? current + 1 : Math.max(0, current - 1));
+        postService.save(post);
+        return "redirect:/posts/" + id;
     }
 
     // добавление комментария
@@ -129,5 +140,40 @@ public class PostController {
             commentService.delete(commentId);
         }
         return "redirect:/posts/" + postId;
+    }
+
+    // Загрузка изображений
+    @PostMapping(value = "/uploadImage", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, String> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            String uploadDir = "C:/myapp/uploads/";
+            String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            System.out.println("Файл: " + filename);
+            Path filepath = Paths.get(uploadDir, filename);
+            Files.createDirectories(filepath.getParent());
+            file.transferTo(filepath);
+            String fileUrl = "/uploads/" + filename;
+            return Map.of("url", fileUrl);
+        } catch (Exception e) {
+            e.printStackTrace(); // Вывод полной ошибки
+            throw new RuntimeException("Ошибка загрузки файла: " + e.getMessage(), e);
+        }
+    }
+
+    // Для пагинации и поиска
+    @GetMapping("/posts")
+    public String listPosts(
+            @RequestParam(defaultValue = "") String search,
+            @RequestParam(defaultValue = "0") int pageNumber,
+            @RequestParam(defaultValue = "10") int pageSize,
+            Model model) {
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, Sort.by("createdAt").descending());
+        Page<PostEntity> page = postService.findByTag(search, pageRequest);
+
+        model.addAttribute("posts", page.getContent());
+        model.addAttribute("paging", page); // для кнопок пагинации
+        model.addAttribute("search", search); // чтобы вернуть строку поиска
+        return "posts";
     }
 }

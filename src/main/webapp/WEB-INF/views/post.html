@@ -3,20 +3,6 @@
 
 <head>
     <title>Витрина товаров</title>
-    <style>
-        .comment-textarea {
-            width: 250px;
-            height: 100px;
-        }
-
-        .comment-current {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
-        }
-    </style>
     <!-- <script>
         function editComment(id) {
             var comment = document.getElementById("comment" + id);
@@ -103,8 +89,8 @@
         <tr>
             <td>
                 <h2 th:text="${post.getTitle()}"></h2>
-                <p style="height:300px">
-                    <img height="300" th:src="${'http://localhost:8080/images/'+post.getId()}">
+                <p style="height:300px" th:if="${post.imageUrl}">
+                    <img th:src="${post.imageUrl}" style="max-height:300px;">
                 </p>
                 <p>
                 <form th:action="@{'/posts/' + ${post.id} + '/like'}" method="post">
@@ -148,10 +134,26 @@
                         комментарий</button>
                 </form> -->
                 <form id="addCommentForm" th:action="@{'/posts/' + ${post.id} + '/comments'}" method="post">
-                    <textarea class="comment-textarea" name="text" placeholder="Введите комментарий" required></textarea>
+                    <textarea class="comment-textarea" name="text" placeholder="Введите комментарий"
+                        required></textarea>
                     <button type="submit" style="float:right;">Добавить комментарий</button>
                 </form>
             </td>
         </tr>
     </table>
 </body>
+
+<style>
+    .comment-textarea {
+        width: 250px;
+        height: 100px;
+    }
+
+    .comment-current {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 50px;
+    }
+</style>

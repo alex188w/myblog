@@ -3,12 +3,9 @@ package example.config;
 import jakarta.persistence.EntityManagerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.*;
 import org.springframework.orm.jpa.vendor.*;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -29,8 +26,9 @@ public class JpaConfig {
 
     // создаем и регистрируем подключение к БД. Можно так
     // @Bean
-    // public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-    //     return new PropertySourcesPlaceholderConfigurer();
+    // public static PropertySourcesPlaceholderConfigurer
+    // propertySourcesPlaceholderConfigurer() {
+    // return new PropertySourcesPlaceholderConfigurer();
     // }
 
     // @Value("${db.url}")
@@ -44,12 +42,12 @@ public class JpaConfig {
 
     // @Bean
     // public DataSource dataSource() {
-    //     var ds = new com.zaxxer.hikari.HikariDataSource();
-    //     ds.setJdbcUrl(jdbcUrl);
-    //     ds.setUsername(username);
-    //     ds.setPassword(password);
-    //     ds.setDriverClassName("org.postgresql.Driver");
-    //     return ds;
+    // var ds = new com.zaxxer.hikari.HikariDataSource();
+    // ds.setJdbcUrl(jdbcUrl);
+    // ds.setUsername(username);
+    // ds.setPassword(password);
+    // ds.setDriverClassName("org.postgresql.Driver");
+    // return ds;
     // }
 
     // или так
@@ -63,6 +61,7 @@ public class JpaConfig {
         ds.setUsername(env.getProperty("db.username"));
         ds.setPassword(env.getProperty("db.password"));
         ds.setDriverClassName("org.postgresql.Driver");
+        System.out.println(">>> DB URL: " + env.getProperty("db.url"));
         return ds;
     }
 
@@ -96,7 +95,7 @@ public class JpaConfig {
         props.setProperty("hibernate.hbm2ddl.auto", "update"); // или validate/create
         props.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         props.setProperty("hibernate.show_sql", "true");
-        props.setProperty("hibernate.format_sql", "true");
+        props.setProperty("hibernate.format_sql", "true");        
         return props;
     }
 }

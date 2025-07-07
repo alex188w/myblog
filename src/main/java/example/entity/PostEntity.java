@@ -1,7 +1,6 @@
 package example.entity;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,27 +15,39 @@ public class PostEntity {
 
     private String title;
     private String preview;
-    private String imageUrl;
     private String text;
     private int commentsCount;
     private int likes;
 
+    // поле для изображения
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    // коллекция тегов
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
     @Column(name = "tag")
     private List<String> tags;
 
-    // Геттеры и сеттеры
+    // геттеры и сеттеры
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<String> tags) {
-        this.tags = tags;
-    }
-
     public String getTagsAsText() {
         return tags == null ? "" : String.join(", ", tags);
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public void setTagsFromText(String text) {
@@ -72,14 +83,6 @@ public class PostEntity {
 
     public void setPreview(String preview) {
         this.preview = preview;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
     }
 
     public String getText() {
@@ -119,10 +122,5 @@ public class PostEntity {
 
     public void setComments(List<CommentEntity> comments) {
         this.comments = comments;
-    }
-
-    public PostEntity orElseThrow() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
     }
 }

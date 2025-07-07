@@ -25,7 +25,7 @@ public class Post {
         this.likes = likes;
     }
 
-    // Геттеры и сеттеры ниже
+    // Геттеры и сеттеры
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

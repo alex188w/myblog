@@ -17,14 +17,27 @@ public class CommentEntity {
     private PostEntity post;
 
     // --- геттеры/сеттеры ---
-    public Long getId() { return id; }
+    public Long getId() {
+        return id;
+    }
 
-    public String getText() { return text; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public void setText(String text) { this.text = text; }
+    public String getText() {
+        return text;
+    }
 
-    public PostEntity getPost() { return post; }
+    public void setText(String text) {
+        this.text = text;
+    }
 
-    public void setPost(PostEntity post) { this.post = post; }
+    public PostEntity getPost() {
+        return post;
+    }
 
+    public void setPost(PostEntity post) {
+        this.post = post;
+    }
 }

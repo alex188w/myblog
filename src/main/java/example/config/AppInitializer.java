@@ -21,7 +21,7 @@ public class AppInitializer implements WebApplicationInitializer {
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping("/");
 
-        // 👇 Добавляем поддержку multipart-запросов здесь
+        // Добавляем поддержку multipart-запросов
         MultipartConfigElement multipartConfig = new MultipartConfigElement(
                 null, 10_000_000, 10_000_000, 1_000_000
         );
