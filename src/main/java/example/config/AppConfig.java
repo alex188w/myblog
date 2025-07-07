@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableWebMvc
 @ComponentScan(basePackages = "example")
 @EnableJpaRepositories(basePackages = "example.repository")
-// @PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.properties")
 public class AppConfig implements WebMvcConfigurer {
 
     @Autowired
